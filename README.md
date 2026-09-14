@@ -1,15 +1,17 @@
 # 🎬 FilmHub - Classificateur de Films
 
-Une interface moderne et intuitive pour classer, organiser et gérer votre collection de films par genre et catégorie.
+Une interface moderne et intuitive pour classer, organiser, gérer et **regarder** votre collection de films par genre et catégorie.
 
 ## ✨ Caractéristiques
 
 ### 🎯 Fonctionnalités Principales
 
-- **📽️ Gestion des Films** - Ajoutez, modifiez et supprimez des films facilement
+- **📽️ Gestion Complète des Films** - Ajoutez, modifiez et supprimez des films facilement
+- **▶️ Visionnage Intégré** - Regardez vos films directement depuis l'application
 - **🎭 Filtrage par Genre** - Organisez vos films par genre (Action, Comédie, Drame, etc.)
 - **📂 Filtrage par Catégorie** - Classez par type (Cinéma, Série, Film court, Documentaire)
 - **⭐ Système de Favoris** - Marquez vos films préférés
+- **▶️ Suivi du Visionnage** - Suivez les films en cours de visionnage
 - **🔍 Recherche Avancée** - Trouvez rapidement vos films
 - **💾 Stockage Local** - Toutes les données sont sauvegardées dans votre navigateur
 - **🎨 Design Moderne** - Interface élégante avec thème sombre
@@ -18,13 +20,14 @@ Une interface moderne et intuitive pour classer, organiser et gérer votre colle
 ### 🎬 Gestion des Films
 
 Pour chaque film, vous pouvez ajouter:
-- Titre (obligatoire)
-- Genre (obligatoire)
-- Catégorie (obligatoire)
+- **Titre** (obligatoire)
+- **Genre** (obligatoire)
+- **Catégorie** (obligatoire)
 - Année de sortie
 - Note personnelle (/10)
 - Description/Résumé
 - URL de l'affiche
+- **Lien de Visionnage** (Netflix, YouTube, etc.)
 
 ## 🚀 Démarrage Rapide
 
@@ -63,47 +66,83 @@ Puis accédez à `http://localhost:8000` dans votre navigateur.
 
 ## 📖 Guide d'Utilisation
 
-### Ajouter un Film
+### 🎬 Ajouter un Film
 
 1. Cliquez sur le bouton **"+ Ajouter un film"** dans la barre latérale
-2. Remplissez les informations obligatoires (Titre, Genre, Catégorie)
-3. Complétez les informations optionnelles
+2. Remplissez les informations obligatoires:
+   - **Titre**: Le nom du film
+   - **Genre**: Choisissez parmi la liste
+   - **Catégorie**: Cinéma, Série, Film court, Documentaire
+3. Complétez les informations optionnelles:
+   - Année de sortie
+   - Note personnelle (0-10)
+   - Description
+   - URL de l'affiche
+   - **Lien de Visionnage** (ex: https://www.netflix.com/...)
 4. Cliquez sur **"Ajouter le film"**
 
-### Filtrer par Genre
+### ▶️ Regarder un Film
+
+**Méthode 1: Depuis une carte de film**
+- Cliquez sur le bouton **▶️** (play) sur la carte
+
+**Méthode 2: Depuis la vue détaillée**
+1. Cliquez sur le film pour ouvrir les détails
+2. Cliquez sur le bouton **"▶️ Regarder"**
+3. Une fenêtre s'ouvre avec un lien pour accéder au film en ligne
+4. Cliquez sur **"🎬 Regarder en ligne"** pour ouvrir dans un nouvel onglet
+
+### 📍 Marquer un Film en Cours de Visionnage
+
+1. Ouvrez la vue détaillée du film
+2. Cliquez sur **"⏸️ Marquer en visionnage"**
+3. Le film apparaît dans la section **"En Visionnage"** de la navigation
+4. Un badge vert **"▶️ En visionnage"** s'affiche sur la carte
+
+### 🎭 Filtrer par Genre
 
 1. Cliquez sur **"Par Genre"** dans la navigation
 2. Sélectionnez le genre souhaité parmi les filtres disponibles
 3. Les films correspondants s'affichent automatiquement
 
-### Filtrer par Catégorie
+### 📂 Filtrer par Catégorie
 
 1. Cliquez sur **"Par Catégorie"** dans la navigation
 2. Sélectionnez la catégorie souhaitée
 3. Visualisez les films de cette catégorie
 
-### Rechercher un Film
+### 🔍 Rechercher un Film
 
 Utilisez la barre de recherche en haut de page pour trouver rapidement un film par:
 - Titre
 - Genre
 - Catégorie
 
-### Gérer les Favoris
+### ⭐ Gérer les Favoris
 
 - Cliquez sur l'icône **cœur** (🤍/❤️) sur une carte de film pour l'ajouter aux favoris
 - Cliquez sur **"Favoris"** pour voir tous vos films préférés
 
-### Voir les Détails d'un Film
+### 👁️ Voir les Films en Visionnage
+
+- Cliquez sur **"En Visionnage"** dans la navigation
+- Voir tous les films marqués comme en cours de visionnage
+- Le compteur en haut à droite affiche le nombre de films en visionnage
+
+### 🔍 Voir les Détails d'un Film
 
 1. Cliquez sur une carte de film
 2. Une fenêtre détaillée s'ouvre avec toutes les informations
-3. Vous pouvez ajouter aux favoris ou supprimer le film depuis cette vue
+3. Vous pouvez:
+   - ▶️ Regarder le film
+   - ❤️ Ajouter aux favoris
+   - ⏸️ Marquer en visionnage
+   - 🗑️ Supprimer le film
 
-### Supprimer un Film
+### 🗑️ Supprimer un Film
 
 - Cliquez sur l'icône **poubelle** (🗑️) sur une carte
-- Ou utilisez le bouton **"Supprimer"** dans la vue détaillée
+- Ou utilisez le bouton **"🗑️ Supprimer"** dans la vue détaillée
 
 ## 🎨 Design et Interface
 
@@ -119,6 +158,7 @@ Utilisez la barre de recherche en haut de page pour trouver rapidement un film p
 - **En-tête** - Recherche et statistiques
 - **Grille de Films** - Affichage en cartes responsives
 - **Modales** - Formulaires et détails en overlay
+- **Lecteur Vidéo** - Intégration pour regarder les films
 
 ## 💾 Stockage des Données
 
@@ -127,6 +167,7 @@ Les films sont automatiquement sauvegardés dans le **localStorage** de votre na
 - ✅ Les données persistent après fermeture du navigateur
 - ✅ Pas besoin de connexion internet pour utiliser l'app
 - ✅ Pas de serveur requis
+- ✅ Tous vos favoris et statuts de visionnage sont conservés
 - ⚠️ Les données sont locales à votre appareil et ce navigateur
 
 **Pour exporter vos données**: Ouvrez la console du navigateur (F12) et exécutez:
@@ -162,7 +203,7 @@ movie-classifier/
 - Thriller
 - Animation
 - Documentaire
-- *(Vous pouvez en ajouter d'autres)*
+- *(Vous pouvez en ajouter d'autres en modifiant le formulaire)*
 
 ## 📂 Catégories Disponibles
 
@@ -170,7 +211,7 @@ movie-classifier/
 - Série
 - Film court
 - Documentaire
-- *(Vous pouvez en ajouter d'autres)*
+- *(Vous pouvez en ajouter d'autres en modifiant le formulaire)*
 
 ## 📱 Compatibilité
 
@@ -185,14 +226,17 @@ L'application fonctionne sur:
 
 ## 🚀 Optimisations Futures
 
+- [ ] Téléchargement de vidéos locales
+- [ ] Lecteur vidéo HTML5 intégré
 - [ ] Export/Import de données (JSON, CSV)
 - [ ] Intégration API OMDB pour récupérer les affiches
 - [ ] Notation par étoiles interactives
 - [ ] Système de tags personnalisés
-- [ ] Historique de visionnage
+- [ ] Historique de visionnage détaillé
+- [ ] Temps de visionnage écoulé
 - [ ] Recommandations basées sur l'IA
 - [ ] Synchronisation cloud
-- [ ] Mode sombre/clair
+- [ ] Mode sombre/clair au choix
 
 ## 📝 Exemples de Films
 
@@ -218,10 +262,16 @@ Vous pouvez les supprimer et ajouter vos propres films!
 - Vérifiez votre connexion internet
 - Utilisez des URLs HTTPS si possible
 
+### Le bouton "Regarder" ne fonctionne pas
+- Assurez-vous d'avoir ajouté un lien de visionnage valide au film
+- Vérifiez que l'URL commence par `http://` ou `https://`
+- Testez le lien dans un navigateur pour vérifier qu'il est valide
+
 ### L'application est lente
 - Videz le cache de votre navigateur
 - Réduisez le nombre de films (localStorage a une limite)
 - Fermez les autres onglets
+- Utilisez un navigateur plus récent
 
 ## 📄 Licence
 
@@ -241,3 +291,5 @@ Pour toute question ou suggestion, ouvrez une issue sur GitHub ou contactez le d
 ---
 
 **Profitez de votre expérience avec FilmHub! 🍿🎬**
+
+Créé avec ❤️ pour les amoureux de cinéma.
