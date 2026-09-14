@@ -1,6 +1,6 @@
 // Classe Movie pour gérer les données
 class Movie {
-    constructor(title, genre, category, year = null, rating = null, description = '', image = '') {
+    constructor(title, genre, category, year = null, rating = null, description = '', image = '', link = '') {
         this.id = Date.now();
         this.title = title;
         this.genre = genre;
@@ -9,8 +9,12 @@ class Movie {
         this.rating = rating;
         this.description = description;
         this.image = image;
+        this.link = link;
         this.favorite = false;
+        this.watching = false;
+        this.progress = 0; // Progression en pourcentage (0-100)
         this.createdAt = new Date();
+        this.startedWatching = null;
     }
 }
 
@@ -58,12 +62,26 @@ class MovieClassifier {
         const closeDetails = document.getElementById('closeDetails');
         closeDetails.addEventListener('click', () => this.closeDetailsModal());
 
+        // Video Player Modal
+        const closePlayer = document.getElementById('closePlayer');
+        closePlayer.addEventListener('click', () => this.closePlayerModal());
+
+        // URL Player Modal
+        const closeUrlPlayer = document.getElementById('closeUrlPlayer');
+        closeUrlPlayer.addEventListener('click', () => this.closeUrlPlayerModal());
+
         // Fermer les modals en cliquant en dehors
         document.getElementById('movieModal').addEventListener('click', (e) => {
             if (e.target.id === 'movieModal') this.closeModal();
         });
         document.getElementById('detailsModal').addEventListener('click', (e) => {
             if (e.target.id === 'detailsModal') this.closeDetailsModal();
+        });
+        document.getElementById('playerModal').addEventListener('click', (e) => {
+            if (e.target.id === 'playerModal') this.closePlayerModal();
+        });
+        document.getElementById('urlPlayerModal').addEventListener('click', (e) => {
+            if (e.target.id === 'urlPlayerModal') this.closeUrlPlayerModal();
         });
 
         // Search
@@ -79,12 +97,12 @@ class MovieClassifier {
 
     loadSampleMovies() {
         const samples = [
-            new Movie('Inception', 'Science-fiction', 'Cinéma', 2010, 8.8, 'Un voleur qui vole les secrets corporatifs grâce à la technologie des rêves partagés.', 'https://via.placeholder.com/200x300?text=Inception'),
-            new Movie('The Dark Knight', 'Action', 'Cinéma', 2008, 9.0, 'Batman doit affronter son plus grand adversaire: le Joker.', 'https://via.placeholder.com/200x300?text=Dark+Knight'),
-            new Movie('Interstellar', 'Science-fiction', 'Cinéma', 2014, 8.6, 'Des astronautes voyagent à travers un trou de ver pour sauver l\'humanité.', 'https://via.placeholder.com/200x300?text=Interstellar'),
-            new Movie('La La Land', 'Romance', 'Cinéma', 2016, 8.0, 'Un pianiste et une actrice tombent amoureux à Los Angeles.', 'https://via.placeholder.com/200x300?text=La+La+Land'),
-            new Movie('Pulp Fiction', 'Thriller', 'Cinéma', 1994, 8.9, 'Plusieurs histoires entrecroisées de criminels à Los Angeles.', 'https://via.placeholder.com/200x300?text=Pulp+Fiction'),
-            new Movie('Toy Story', 'Animation', 'Cinéma', 1995, 8.3, 'Les jouets prennent vie quand les humains ne sont pas là.', 'https://via.placeholder.com/200x300?text=Toy+Story'),
+            new Movie('Inception', 'Science-fiction', 'Cinéma', 2010, 8.8, 'Un voleur qui vole les secrets corporatifs grâce à la technologie des rêves partagés.', 'https://via.placeholder.com/200x300?text=Inception', 'https://www.netflix.com'),
+            new Movie('The Dark Knight', 'Action', 'Cinéma', 2008, 9.0, 'Batman doit affronter son plus grand adversaire: le Joker.', 'https://via.placeholder.com/200x300?text=Dark+Knight', 'https://www.hbomax.com'),
+            new Movie('Interstellar', 'Science-fiction', 'Cinéma', 2014, 8.6, 'Des astronautes voyagent à travers un trou de ver pour sauver l\'humanité.', 'https://via.placeholder.com/200x300?text=Interstellar', 'https://www.netflix.com'),
+            new Movie('La La Land', 'Romance', 'Cinéma', 2016, 8.0, 'Un pianiste et une actrice tombent amoureux à Los Angeles.', 'https://via.placeholder.com/200x300?text=La+La+Land', 'https://www.netflix.com'),
+            new Movie('Pulp Fiction', 'Thriller', 'Cinéma', 1994, 8.9, 'Plusieurs histoires entrecroisées de criminels à Los Angeles.', 'https://via.placeholder.com/200x300?text=Pulp+Fiction', 'https://www.netflix.com'),
+            new Movie('Toy Story', 'Animation', 'Cinéma', 1995, 8.3, 'Les jouets prennent vie quand les humains ne sont pas là.', 'https://via.placeholder.com/200x300?text=Toy+Story', 'https://www.disneyplus.com'),
         ];
 
         samples.forEach(movie => this.movies.push(movie));
@@ -121,6 +139,17 @@ class MovieClassifier {
         document.getElementById('detailsModal').classList.remove('active');
     }
 
+    closePlayerModal() {
+        document.getElementById('playerModal').classList.remove('active');
+        const videoElement = document.getElementById('videoElement');
+        videoElement.pause();
+        videoElement.src = '';
+    }
+
+    closeUrlPlayerModal() {
+        document.getElementById('urlPlayerModal').classList.remove('active');
+    }
+
     handleAddMovie(e) {
         e.preventDefault();
 
@@ -131,13 +160,14 @@ class MovieClassifier {
         const rating = document.getElementById('movieRating').value || null;
         const description = document.getElementById('movieDescription').value;
         const image = document.getElementById('movieImage').value;
+        const link = document.getElementById('movieLink').value;
 
         if (!title || !genre || !category) {
             alert('Veuillez remplir tous les champs obligatoires');
             return;
         }
 
-        const movie = new Movie(title, genre, category, year, rating, description, image);
+        const movie = new Movie(title, genre, category, year, rating, description, image, link);
         this.movies.push(movie);
         
         this.genres.add(genre);
@@ -163,7 +193,7 @@ class MovieClassifier {
             btn.classList.remove('active');
         });
         if (this.currentGenreFilter) {
-            document.querySelector(`[data-genre="${this.currentGenreFilter}"]`).classList.add('active');
+            document.querySelector(`[data-genre="${this.currentGenreFilter}"]`)?.classList.add('active');
         }
 
         this.renderMovies();
@@ -188,6 +218,50 @@ class MovieClassifier {
         }
     }
 
+    toggleWatching(id) {
+        const movie = this.movies.find(m => m.id === id);
+        if (movie) {
+            movie.watching = !movie.watching;
+            if (movie.watching) {
+                movie.startedWatching = new Date();
+            }
+            this.saveToStorage();
+            this.renderMovies();
+            this.updateStats();
+        }
+    }
+
+    playMovie(id) {
+        const movie = this.movies.find(m => m.id === id);
+        if (!movie) return;
+
+        if (movie.link && movie.link.trim()) {
+            // Ouvrir le lien dans un nouvel onglet
+            this.openUrlPlayer(id);
+        } else {
+            alert('Aucun lien de visionnage disponible pour ce film. Ajoutez un lien pour pouvoir le regarder.');
+        }
+    }
+
+    openUrlPlayer(id) {
+        const movie = this.movies.find(m => m.id === id);
+        if (!movie) return;
+
+        document.getElementById('urlMovieTitle').textContent = movie.title;
+        document.getElementById('urlMovieDesc').textContent = movie.description || 'Cliquez sur le bouton ci-dessous pour regarder le film en ligne.';
+        
+        const link = document.getElementById('urlPlayerLink');
+        link.href = movie.link;
+        link.target = '_blank';
+
+        document.getElementById('urlPlayerModal').classList.add('active');
+
+        // Marquer comme en cours de visionnage
+        if (!movie.watching) {
+            this.toggleWatching(id);
+        }
+    }
+
     filterMovies() {
         let filtered = [...this.movies];
 
@@ -205,6 +279,9 @@ class MovieClassifier {
                 break;
             case 'favorites':
                 filtered = filtered.filter(m => m.favorite);
+                break;
+            case 'watching':
+                filtered = filtered.filter(m => m.watching);
                 break;
         }
 
@@ -247,10 +324,20 @@ class MovieClassifier {
             });
 
             const favoriteBtn = card.querySelector('.btn-icon.favorite');
-            favoriteBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                this.toggleFavorite(movieId);
-            });
+            if (favoriteBtn) {
+                favoriteBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.toggleFavorite(movieId);
+                });
+            }
+
+            const watchBtn = card.querySelector('.btn-icon.watch');
+            if (watchBtn) {
+                watchBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.playMovie(movieId);
+                });
+            }
 
             const deleteBtn = card.querySelector('.btn-icon.delete');
             if (deleteBtn) {
@@ -267,6 +354,7 @@ class MovieClassifier {
         const imageHtml = movie.image 
             ? `<img src="${movie.image}" alt="${movie.title}" onerror="this.style.display='none'">`
             : '';
+        const watchingHtml = movie.watching ? `<div class="movie-watch-status">▶️ En visionnage</div>` : '';
         
         return `
             <div class="movie-card" data-id="${movie.id}">
@@ -274,6 +362,7 @@ class MovieClassifier {
                     ${imageHtml}
                     <div class="movie-badge">${movie.category}</div>
                     ${ratingHtml}
+                    ${watchingHtml}
                 </div>
                 <div class="movie-info">
                     <div class="movie-title">${movie.title}</div>
@@ -282,10 +371,13 @@ class MovieClassifier {
                         ${movie.year ? `<span>${movie.year}</span>` : ''}
                     </div>
                     <div class="movie-actions">
-                        <button class="btn-icon favorite ${movie.favorite ? 'active' : ''}">
+                        <button class="btn-icon favorite ${movie.favorite ? 'active' : ''}" title="Ajouter aux favoris">
                             ${movie.favorite ? '❤️' : '🤍'}
                         </button>
-                        <button class="btn-icon delete">🗑️</button>
+                        <button class="btn-icon watch" title="Regarder le film">
+                            ▶️
+                        </button>
+                        <button class="btn-icon delete" title="Supprimer">🗑️</button>
                     </div>
                 </div>
             </div>
@@ -308,6 +400,10 @@ class MovieClassifier {
 
         const descriptionHtml = movie.description 
             ? `<div class="details-description">${movie.description}</div>`
+            : '';
+
+        const watchButton = movie.link 
+            ? `<button class="btn-submit btn-watch" onclick="app.playMovie(${movie.id});">▶️ Regarder</button>`
             : '';
 
         movieDetails.innerHTML = `
@@ -338,13 +434,23 @@ class MovieClassifier {
                                 <div class="meta-value">⭐ ${movie.rating}/10</div>
                             </div>
                         ` : ''}
+                        ${movie.watching ? `
+                            <div class="meta-item">
+                                <div class="meta-label">Statut</div>
+                                <div class="meta-value">▶️ En visionnage</div>
+                            </div>
+                        ` : ''}
                     </div>
                 </div>
             </div>
             ${descriptionHtml}
             <div class="details-actions">
+                ${watchButton}
                 <button class="btn-submit" onclick="app.toggleFavorite(${movie.id}); app.showMovieDetails(${movie.id});">
                     ${movie.favorite ? '❌ Retirer des favoris' : '❤️ Ajouter aux favoris'}
+                </button>
+                <button class="btn-submit" onclick="app.toggleWatching(${movie.id}); app.showMovieDetails(${movie.id});">
+                    ${movie.watching ? '⏹️ Arrêter le visionnage' : '⏸️ Marquer en visionnage'}
                 </button>
                 <button class="btn-delete" onclick="app.deleteMovie(${movie.id});">
                     🗑️ Supprimer
@@ -396,20 +502,23 @@ class MovieClassifier {
             btn.classList.remove('active');
         });
         if (this.currentGenreFilter) {
-            document.querySelector(`[data-category="${this.currentGenreFilter}"]`).classList.add('active');
+            document.querySelector(`[data-category="${this.currentGenreFilter}"]`)?.classList.add('active');
         }
 
         this.renderMovies();
     }
 
     updateStats() {
+        const watchingCount = this.movies.filter(m => m.watching).length;
         document.getElementById('totalMovies').textContent = this.movies.length;
+        document.getElementById('watchingCount').textContent = watchingCount;
     }
 
     saveToStorage() {
         const data = this.movies.map(movie => ({
             ...movie,
-            createdAt: movie.createdAt.toISOString()
+            createdAt: movie.createdAt.toISOString(),
+            startedWatching: movie.startedWatching ? movie.startedWatching.toISOString() : null
         }));
         localStorage.setItem('movies', JSON.stringify(data));
     }
@@ -427,11 +536,15 @@ class MovieClassifier {
                         item.year,
                         item.rating,
                         item.description,
-                        item.image
+                        item.image,
+                        item.link
                     );
                     movie.id = item.id;
                     movie.favorite = item.favorite || false;
+                    movie.watching = item.watching || false;
+                    movie.progress = item.progress || 0;
                     movie.createdAt = new Date(item.createdAt);
+                    movie.startedWatching = item.startedWatching ? new Date(item.startedWatching) : null;
                     return movie;
                 });
 
